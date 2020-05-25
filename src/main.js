@@ -13,6 +13,11 @@ import './lib/mui/css/mui.min.css'
 
 //导入mui扩展图标样式
 import './lib/mui/css/icons-extra.css'
+//全局过滤器，时间
+import moment from 'moment'
+Vue.filter('dateFormat', function (dataStr, pattern = "YYYY-MM-DD HH:mm:ss") {
+  return moment(dataStr).format(pattern)
+})
 
 //1.1导入路由包
 import VueRouter from 'vue-router'
