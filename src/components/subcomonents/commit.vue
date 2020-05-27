@@ -2,9 +2,9 @@
 	<div class="cmt-container">
     	<h3>发表评论</h3>
     	<hr>
-    	<textarea placeholder="请输入要BB的内容（做多吐槽120字）" maxlength="120"></textarea>
+    	<textarea placeholder="请输入要BB的内容（做多吐槽120字）" maxlength="120" v-model="msg"></textarea>
 	
-    	<mt-button type="primary" size="large">发表评论</mt-button>
+    	<mt-button type="primary" size="large" @click="postComment">发表评论</mt-button>
 	
     	<div class="cmt-list">
     	  <div class="cmt-item" v-for="(item, i) in comments" :key="item.add_time">
@@ -27,7 +27,8 @@
 		data(){
 			return {
 				comments:[],
-				pageIndex:1
+				pageIndex:1,
+				msg:''
 			}
 		},
 		created(){
@@ -48,6 +49,22 @@
 			getMore(){
 				this.pageIndex++
 				this.getcomments()
+			},
+			postComment(){
+				if (this.msg.trim().length===0) {
+					return Toast('输入数据')
+				}
+				this.$http.post('api/postcomment/'+this.$route.params.id,{content:this.msg.trim()}).then(result=>{
+					if (result.body.status===0) {
+						var cmt = {
+             			user_name: "冰骑士雪诺",
+              			add_time: Date.now(),
+              			content: this.msg.trim()
+            			}
+            			this.comments.unshift(cmt)
+            			this.msg=''
+					}
+				})
 			}
 		},
 		props:["id"]
