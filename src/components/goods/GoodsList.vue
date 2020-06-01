@@ -1,51 +1,47 @@
 <template>
 	<div class="goods_list">
-		<div class="goods_item">
-			<img src="" alt="">
-			<h1>title</h1>
+		<router-link class="goods_item" v-for="item in goodslist" :key="item.id" :to="'/home/goodsinfo/'+item.id" tag="div">
+			<img :src="item.img_url" alt="">
+			<h1 class="title">{{item.title}}</h1>
 			<div class="info">
         		<p class="price">
-        		  <span class="now">￥899</span>
-        		  <span class="old">￥999</span>
+        		  <span class="now">￥{{item.sell_price}}</span>
+        		  <span class="old">￥{{item.market_price}}</span>
         		</p>
         		<p class="sell">
         		  <span>热卖中</span>
-        		  <span>剩60件</span>
+        		  <span>剩{{item.stock_quantity}}件</span>
         		</p>
-      		</div>
-		</div>
-		<div class="goods_item">
-			<img src="" alt="">
-			<h1>title</h1>
-			<div class="info">
-        		<p class="price">
-        		  <span class="now">￥899</span>
-        		  <span class="old">￥999</span>
-        		</p>
-        		<p class="sell">
-        		  <span>热卖中</span>
-        		  <span>剩60件</span>
-        		</p>
-      		</div>
-		</div>
-		<div class="goods_item">
-			<img src="" alt="">
-			<h1>title</h1>
-			<div class="info">
-        		<p class="price">
-        		  <span class="now">￥899</span>
-        		  <span class="old">￥999</span>
-        		</p>
-        		<p class="sell">
-        		  <span>热卖中</span>
-        		  <span>剩60件</span>
-        		</p>
-      		</div>
-		</div>
+      </div>
+		</router-link>
+		<mt-button type="danger" size="large" @click="getMore">加载更多</mt-button>
 	</div>
 </template>
 <script>
-	
+	export default {
+		data(){
+			return {
+				pageindex:1,
+				goodslist:[]
+			}
+		},
+		created(){
+			this.getgoodslist()
+		},
+		methods:{
+			getgoodslist(){
+				this.$http.get('api/getgoods?pageindex='+this.pageindex).then(result=>{
+					if (result.body.status===0) {
+						this.goodslist=this.goodslist.concat(result.body.message)
+					}
+				})
+			},
+			getMore(){
+				this.pageindex++
+				this.getgoodslist()
+			}
+		}
+	}
 </script>
 <style lang="scss" scoped>
 .goods_list {
