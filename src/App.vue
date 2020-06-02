@@ -1,7 +1,11 @@
 <template>
 	<div class="container">
 		<!-- Hearder 区域 -->
-		<mt-header fixed title="vue商城项目"></mt-header>
+		<mt-header fixed title="vue商城项目">
+			<span slot="left" @click="goback" v-show="flag">
+    			<mt-button icon="back">返回</mt-button>
+  			</span>
+		</mt-header>
 		<!-- 切换 区域 -->
 		<router-view></router-view>	
 		<!-- Tabbar 区域 -->
@@ -15,7 +19,7 @@
 				<span class="mui-tab-label">会员</span>
 			</router-link>
 			<router-link class="mui-tab-item-i" to="/shopcar">
-				<span class="mui-icon mui-icon-extra mui-icon-extra-cart"><span class="mui-badge" id="badge">0</span></span>
+				<span class="mui-icon mui-icon-extra mui-icon-extra-cart"><span class="mui-badge" id="badge">{{$store.getters.getAllCount}}</span></span>
 				<span class="mui-tab-label">购物车</span>
 			</router-link>
 			<router-link class="mui-tab-item-i" to="/search">
@@ -26,7 +30,30 @@
 	</div>
 </template>
 <script>
-	
+	export default {
+		data(){
+			return {
+				flag:true
+			}
+		},
+		methods:{
+			goback(){
+				this.$router.go(-1)
+			}
+		},
+		created(){
+			this.flag=this.$route.path==='/home'?false:true
+		},
+		watch:{
+			"$route.path":function(val){
+				if (val==='/home') {
+					this.flag=false
+				}else{
+					this.flag=true
+				}
+			}
+		}
+	}
 </script>
 <style lang="scss" scoped>
 	.container{

@@ -91,6 +91,13 @@
 			},
 			getshow(){
 				this.showFull=!this.showFull
+				var goodsinfos={
+					id:this.id,
+					count:this.goodscount,
+					price:this.goodsinfo.sell_price,
+					selected:true
+				}
+				this.$store.commit('addtocar',goodsinfos)
 			},
 			beforeEnter(el){
 				el.style.transform="translate(0px,0px)"
